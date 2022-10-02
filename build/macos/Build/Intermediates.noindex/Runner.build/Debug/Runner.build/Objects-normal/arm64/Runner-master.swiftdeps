@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)"
+options: "1094cfbb3cd9eaf56e8c93ea529e52c85e12752da4daabdc76efe2b82b962874"
+build_start_time: [1664741400, 627264976]
+build_end_time: [1664741406, 435484886]
+inputs:
+  "/Volumes/SATECHI/Documentos/FlutterApps/instagram/macos/Flutter/GeneratedPluginRegistrant.swift": [1664741389, 176659584]
+  "/Volumes/SATECHI/Documentos/FlutterApps/instagram/macos/Runner/AppDelegate.swift": [1657737532, 0]
+  "/Volumes/SATECHI/Documentos/FlutterApps/instagram/macos/Runner/MainFlutterWindow.swift": [1657737532, 0]
