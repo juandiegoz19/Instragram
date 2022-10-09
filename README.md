@@ -2,4 +2,4 @@
 
 A new Flutter project.
 
-![myfile](https://raw.githubusercontent.com/juandiegoz19/instagram/main/gif/instagram.gif)
+![myfile](https://github.com/juandiegoz19/instragram/blob/main/gif/instagram.gif)
