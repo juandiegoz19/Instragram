@@ -1,25 +1,11 @@
-import 'dart:io' show HttpHeaders;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:instagram/HomeModel.dart';
 import 'package:instagram/people.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  Future<People> people(String type) async {
-    final response = await http.get(
-        Uri.parse(type.isEmpty ? 'https://api.pexels.com/v1/curated?per_page=80' :'https://api.pexels.com/v1/search?per_page=80&query=$type'),
-        headers: {
-          HttpHeaders.authorizationHeader:
-              'Bearer 563492ad6f91700001000001615e94e989a249d28d6581a35e444715',
-        });
-    return peopleFromJson(response.body);
-  }
+class HomeP extends StatelessWidget {
+  final HomeModel homeModel = HomeModel();
+  HomeP({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +84,7 @@ class _HomeState extends State<Home> {
         body: Column(
           children: [
             FutureBuilder<People>(
-                future: people('portrait'),
+                future: homeModel.imageHome('portrait'),
                 builder:
                     (BuildContext context, AsyncSnapshot<People> snapshot) {
                   Widget children =
@@ -135,7 +121,7 @@ class _HomeState extends State<Home> {
                 }),
             Expanded(
               child: FutureBuilder<People>(
-                future: people(''),
+                future: homeModel.imageHome(''),
                 builder:
                     (BuildContext context, AsyncSnapshot<People> snapshot) {
                   if (snapshot.hasError) {
@@ -143,7 +129,7 @@ class _HomeState extends State<Home> {
                   } else if (snapshot.hasData) {
                     People? people = snapshot.data;
                     return ListView.builder(
-                      cacheExtent: 9999999,
+                        cacheExtent: 9999999,
                         itemCount: snapshot.data?.photos.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
@@ -178,8 +164,9 @@ class _HomeState extends State<Home> {
                                       const SizedBox(width: 5),
                                       Expanded(
                                           child: Text(
-                                        people?.photos[index].photographer ?? '',
-                                        style:const TextStyle(
+                                        people?.photos[index].photographer ??
+                                            '',
+                                        style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
                                       )),
@@ -195,10 +182,23 @@ class _HomeState extends State<Home> {
                                     border: Border.all(
                                         color: Colors.white60, width: 1.5),
                                   ),
-                                  child: Image.network(
-                                    people?.photos[index].src.large ?? '',
+                                  child: CachedNetworkImage(
                                     width: MediaQuery.of(context).size.width,
                                     fit: BoxFit.cover,
+                                    imageUrl:
+                                        people?.photos[index].src.large ?? '',
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                                 Padding(
@@ -211,19 +211,32 @@ class _HomeState extends State<Home> {
                                       Expanded(
                                           child: Row(
                                         children: [
-                                          Icon((people?.photos[index].id ?? 10) % 2 != 0 ? Icons.favorite : Icons.favorite_border_outlined,
-                                              size: 30, color: (people?.photos[index].id ?? 10) % 2 != 0 ? Colors.red: Colors.black),
+                                          Icon(
+                                              (people?.photos[index].id ?? 10) %
+                                                          2 !=
+                                                      0
+                                                  ? Icons.favorite
+                                                  : Icons
+                                                      .favorite_border_outlined,
+                                              size: 30,
+                                              color:
+                                                  (people?.photos[index].id ??
+                                                                  10) %
+                                                              2 !=
+                                                          0
+                                                      ? Colors.red
+                                                      : Colors.black),
                                           const SizedBox(
                                             width: 15,
                                           ),
                                           const Icon(
-                                              Icons
-                                                  .mode_comment_outlined,
+                                              Icons.mode_comment_outlined,
                                               size: 30),
                                           const SizedBox(
                                             width: 15,
                                           ),
-                                          const Icon(Icons.send_outlined, size: 30),
+                                          const Icon(Icons.send_outlined,
+                                              size: 30),
                                         ],
                                       )),
                                       const Icon(Icons.bookmark_border_outlined,
@@ -257,8 +270,7 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
                                   child: Text(
                                     'Hace una hora',
                                     style: TextStyle(
