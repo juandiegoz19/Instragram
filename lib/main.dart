@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:instagram/Home.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:instagram/screen/Home.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child:  MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Instagram',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
